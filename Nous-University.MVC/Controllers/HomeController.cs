@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nous_University.Models;
 
-namespace Nous_University.Controllers;
+namespace Nous_University.MVC.Controllers;
 
 public class HomeController : Controller
 {

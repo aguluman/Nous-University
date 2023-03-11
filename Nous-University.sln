@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nous-University", "Nous-University\Nous-University.csproj", "{50E2BB01-5522-4C4F-8A48-32A6CA593D49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nous-University.MVC", "Nous-University.MVC\Nous-University.MVC.csproj", "{50E2BB01-5522-4C4F-8A48-32A6CA593D49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nous-University.DataLayer", "Nous-University.DataLayer\Nous-University.DataLayer.csproj", "{FA5D1DFB-83A8-4442-A3E3-72208FB3EA01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{50E2BB01-5522-4C4F-8A48-32A6CA593D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50E2BB01-5522-4C4F-8A48-32A6CA593D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50E2BB01-5522-4C4F-8A48-32A6CA593D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5D1DFB-83A8-4442-A3E3-72208FB3EA01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5D1DFB-83A8-4442-A3E3-72208FB3EA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5D1DFB-83A8-4442-A3E3-72208FB3EA01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5D1DFB-83A8-4442-A3E3-72208FB3EA01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
