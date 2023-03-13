@@ -14,20 +14,25 @@ public class SeedData
                 return;   // DB has been seeded
             }
 
-            var students = new Student[]
+            var students = new []
             {
-            new Student{FirstName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName= "Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2022-09-01")},
-            new Student{FirstName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2022-09-01")}
+            new {FirstName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName= "Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2022-09-01")},
+            new {FirstName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2022-09-01")}
             };
             foreach (var s in students)
             {
-                context.Students.Add(s);
+                context.Students.Add(new Student
+                {
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    EnrollmentDate = s.EnrollmentDate
+                });
             }
             context.SaveChanges();
 
