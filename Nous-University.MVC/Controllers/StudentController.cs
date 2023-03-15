@@ -94,7 +94,7 @@ namespace Nous_University.MVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     _context.Add(student);
                     await _context.SaveChangesAsync();
@@ -140,7 +140,7 @@ namespace Nous_University.MVC.Controllers
             }
             var studentToUpdate = await _context.Students.FirstOrDefaultAsync(s => s.ID == id);
             Debug.Assert(studentToUpdate != null, nameof(studentToUpdate) + " != null");
-                if (!await TryUpdateModelAsync(
+                if (await TryUpdateModelAsync(
                     studentToUpdate,
                     "",
                     s => s.FirstName, s => s.LastName, s => s.EnrollmentDate)) 

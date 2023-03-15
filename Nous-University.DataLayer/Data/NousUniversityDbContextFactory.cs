@@ -9,7 +9,7 @@ public class NousUniversityDbContextFactory : IDesignTimeDbContextFactory<NousUn
     {
         var optionsBuilder = new DbContextOptionsBuilder<NousUniversityDbContext>();
         const string connString =
-            @"Data Source=WORKSPACE\SQLEXPRESS;Initial Catalog=NousUniversity;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            @"Data Source=WORKSPACE\SQLEXPRESS;Initial Catalog=NousUniversityTwo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         optionsBuilder.UseSqlServer(connString);
         return new NousUniversityDbContext(optionsBuilder.Options);
         

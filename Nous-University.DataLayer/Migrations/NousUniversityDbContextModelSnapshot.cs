@@ -27,16 +27,66 @@ namespace Nous_University.DataLayer.Migrations
                     b.Property<int>("CourseID")
                         .HasColumnType("int");
 
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Units")
                         .HasColumnType("int");
 
                     b.HasKey("CourseID");
 
-                    b.ToTable("Courses");
+                    b.HasIndex("DepartmentID");
+
+                    b.ToTable("Course", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.CourseAssignment", b =>
+                {
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseID", "InstructorID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("CourseAssignment", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Department", b =>
+                {
+                    b.Property<int>("DepartmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentID"), 1L, 1);
+
+                    b.Property<decimal>("Budget")
+                        .HasColumnType("money");
+
+                    b.Property<int?>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DepartmentID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("Department", (string)null);
                 });
 
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Enrollment", b =>
@@ -62,7 +112,49 @@ namespace Nous_University.DataLayer.Migrations
 
                     b.HasIndex("StudentID");
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollment", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Instructor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Instructor", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.OfficeAssignment", b =>
+                {
+                    b.Property<int>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("InstructorID");
+
+                    b.ToTable("OfficeAssignment", (string)null);
                 });
 
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Student", b =>
@@ -78,15 +170,56 @@ namespace Nous_University.DataLayer.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Students");
+                    b.ToTable("Student", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Course", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.CourseAssignment", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Course", "Course")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nous_University.DataLayer.Entities.Instructor", "Instructor")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("InstructorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Department", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Instructor", "Administrator")
+                        .WithMany()
+                        .HasForeignKey("InstructorID");
+
+                    b.Navigation("Administrator");
                 });
 
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Enrollment", b =>
@@ -108,9 +241,35 @@ namespace Nous_University.DataLayer.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.OfficeAssignment", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Instructor", "Instructor")
+                        .WithOne("OfficeAssignment")
+                        .HasForeignKey("Nous_University.DataLayer.Entities.OfficeAssignment", "InstructorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Course", b =>
                 {
+                    b.Navigation("CourseAssignments");
+
                     b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Department", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Instructor", b =>
+                {
+                    b.Navigation("CourseAssignments");
+
+                    b.Navigation("OfficeAssignment")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Student", b =>
