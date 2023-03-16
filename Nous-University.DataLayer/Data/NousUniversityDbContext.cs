@@ -11,6 +11,7 @@ public class NousUniversityDbContext : DbContext
         
     }
 
+    //Create a configuration dbcontext method
 
 
     public DbSet<Course> Courses { get; set; }
