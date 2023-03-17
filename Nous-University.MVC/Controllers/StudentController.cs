@@ -138,7 +138,9 @@ namespace Nous_University.MVC.Controllers
             {
                 return NotFound();
             }
-            var studentToUpdate = await _context.Students.FirstOrDefaultAsync(s => s.ID == id);
+            var studentToUpdate = await _context.Students
+                .FirstOrDefaultAsync(s => s.ID == id);
+            
             Debug.Assert(studentToUpdate != null, nameof(studentToUpdate) + " != null");
                 if (await TryUpdateModelAsync(
                     studentToUpdate,

@@ -27,7 +27,17 @@ public class Instructor
     public string FullName => $"{LastName}, {FirstName}";
     //The FullName property is not mapped to the database.
 
-    public ICollection<CourseAssignment> CourseAssignments { get; set; }
+    private ICollection<CourseAssignment> _courseAssignments;
+
+    public ICollection<CourseAssignment> CourseAssignments
+    {
+        get
+        {
+            return _courseAssignments ??= new List<CourseAssignment>();
+        }
+        set => _courseAssignments = value;
+    }
+    
     public OfficeAssignment OfficeAssignment { get; set; }
 }
 
