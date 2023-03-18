@@ -121,33 +121,6 @@ namespace Nous_University.DataLayer.Migrations
                     b.ToTable("Enrollment", (string)null);
                 });
 
-            modelBuilder.Entity("Nous_University.DataLayer.Entities.Instructor", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Instructor", (string)null);
-                });
-
             modelBuilder.Entity("Nous_University.DataLayer.Entities.OfficeAssignment", b =>
                 {
                     b.Property<int>("InstructorID")
@@ -163,7 +136,7 @@ namespace Nous_University.DataLayer.Migrations
                     b.ToTable("OfficeAssignment", (string)null);
                 });
 
-            modelBuilder.Entity("Nous_University.DataLayer.Entities.Student", b =>
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Person", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -171,13 +144,11 @@ namespace Nous_University.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -185,6 +156,26 @@ namespace Nous_University.DataLayer.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
+
+                    b.ToTable("Person", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Instructor", b =>
+                {
+                    b.HasBaseType("Nous_University.DataLayer.Entities.Person");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("Instructor", (string)null);
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Student", b =>
+                {
+                    b.HasBaseType("Nous_University.DataLayer.Entities.Person");
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
 
                     b.ToTable("Student", (string)null);
                 });
@@ -256,6 +247,24 @@ namespace Nous_University.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Instructor", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Person", null)
+                        .WithOne()
+                        .HasForeignKey("Nous_University.DataLayer.Entities.Instructor", "ID")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Nous_University.DataLayer.Entities.Student", b =>
+                {
+                    b.HasOne("Nous_University.DataLayer.Entities.Person", null)
+                        .WithOne()
+                        .HasForeignKey("Nous_University.DataLayer.Entities.Student", "ID")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Nous_University.DataLayer.Entities.Course", b =>

@@ -21,6 +21,8 @@ public class NousUniversityDbContext : DbContext
     public DbSet<Instructor> Instructors { get; set; }
     public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
     public DbSet<CourseAssignment> CourseAssignments { get; set; }
+    public DbSet<Person> People { get; set; }
+    
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +34,7 @@ public class NousUniversityDbContext : DbContext
         modelBuilder.Entity<Instructor>().ToTable("Instructor");
         modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignment");
         modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
+        modelBuilder.Entity<Person>().ToTable("Person");
         
 
         modelBuilder.Entity<CourseAssignment>()
