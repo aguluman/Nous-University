@@ -24,8 +24,10 @@ namespace Nous_University.MVC.Controllers
             int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["NameSortParm"] =
+                string.IsNullOrEmpty(sortOrder) ? "LastName_desc" : "";
+            ViewData["DateSortParm"] =
+                sortOrder == "EnrollmentDate" ? "EnrollmentDate_desc" : "EnrollmentDate";
 
             if (searchString != null)
             {
@@ -40,21 +42,32 @@ namespace Nous_University.MVC.Controllers
 
             var students = from s in _context.Students
                 select s;
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 students = students.Where(s => s.LastName.Contains(searchString)
                                                || s.FirstName.Contains(searchString));
             }
 
-            students = sortOrder switch
+            if (string.IsNullOrEmpty(sortOrder))
             {
-                "name_desc" => students.OrderByDescending(s => s.LastName),
-                "Date" => students.OrderBy(s => s.EnrollmentDate),
-                "date_desc" => students.OrderByDescending(s => s.EnrollmentDate),
-                _ => students.OrderBy(s => s.LastName)
-            };
-            const int pageSize = 5;
-            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+                sortOrder = "LastName";
+            }
+
+            var descending = false;
+            if (sortOrder.EndsWith("_desc"))
+            {
+                sortOrder = sortOrder[..^5];
+                descending = true;
+            }
+
+            students = descending
+                ? students.OrderByDescending(e => EF.Property<object>(e, sortOrder))
+                : students.OrderBy(e => EF.Property<object>(e, sortOrder));
+
+            const int pageSize = 3;
+            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(),
+                pageNumber ?? 1, pageSize));
         }
 
         // GET: Student/Details/5
@@ -90,7 +103,8 @@ namespace Nous_University.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("EnrollmentDate,FirstName,LastName")] Student student)
+            [Bind("EnrollmentDate,FirstName,LastName")]
+            Student student)
         {
             try
             {
@@ -108,6 +122,7 @@ namespace Nous_University.MVC.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
+
             return View(student);
         }
 
@@ -124,6 +139,7 @@ namespace Nous_University.MVC.Controllers
             {
                 return NotFound();
             }
+
             return View(student);
         }
 
@@ -138,14 +154,15 @@ namespace Nous_University.MVC.Controllers
             {
                 return NotFound();
             }
+
             var studentToUpdate = await _context.Students
                 .FirstOrDefaultAsync(s => s.ID == id);
-            
+
             Debug.Assert(studentToUpdate != null, nameof(studentToUpdate) + " != null");
-                if (await TryUpdateModelAsync(
+            if (await TryUpdateModelAsync(
                     studentToUpdate,
                     "",
-                    s => s.FirstName, s => s.LastName, s => s.EnrollmentDate)) 
+                    s => s.FirstName, s => s.LastName, s => s.EnrollmentDate))
                 return View(studentToUpdate);
             try
             {
@@ -159,6 +176,7 @@ namespace Nous_University.MVC.Controllers
                                              "Try again, and if the problem persists, " +
                                              "see your system administrator.");
             }
+
             return View(studentToUpdate);
         }
 
@@ -214,7 +232,7 @@ namespace Nous_University.MVC.Controllers
 
         private bool StudentExists(int id)
         {
-          return (_context.Students?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.Students?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

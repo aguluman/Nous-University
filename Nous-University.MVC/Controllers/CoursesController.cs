@@ -128,7 +128,24 @@ namespace Nous_University.MVC.Controllers
             PopulateDepartmentsDropDownList(courseToUpdate.DepartmentID);
             return View(courseToUpdate);
         }
+
+        //Get updated courses
+        public IActionResult UpdateCourseCredits()
+        {
+            return View();
+        }
         
+        [HttpPost]
+        public async Task<IActionResult> UpdateCourseCredits(int? multiplier)
+        {
+            if (multiplier != null)
+            {
+                ViewData["RowsAffected"] = await _context.Database
+                    .ExecuteSqlInterpolatedAsync($"UPDATE Course SET Units = Units * {multiplier}");
+            }
+            return View();
+        }
+
         private void PopulateDepartmentsDropDownList(object selectDepartment = null)
         {
             var departmentsQuery = from d in _context.Departments

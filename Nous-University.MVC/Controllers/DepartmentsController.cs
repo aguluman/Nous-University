@@ -23,18 +23,22 @@ namespace Nous_University.MVC.Controllers
             return View(await nousUniversityDbContext.ToListAsync());
         }
 
+
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Departments == null)
+            if (id == null)
             {
                 return NotFound();
             }
-
+            
+            var query = "SELECT * FROM dbo.Department WHERE DepartmentID = {0}";
             var department = await _context.Departments
+                .FromSqlRaw(query, id)
                 .Include(d => d.Administrator)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
+            
             if (department == null)
             {
                 return NotFound();
@@ -74,7 +78,7 @@ namespace Nous_University.MVC.Controllers
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Departments == null)
+            if (id == null)
             {
                 return NotFound();
             }

@@ -23,7 +23,6 @@ namespace Nous_University.MVC.Controllers
                 Instructors = await _context.Instructors
                     .Include(i => i.OfficeAssignment)
                     .Include(i => i.CourseAssignments)
-
                     .ThenInclude(i => i.Course)
                     .ThenInclude(i => i.Department)
                     .OrderBy(i => i.LastName)
@@ -83,7 +82,8 @@ namespace Nous_University.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,HireDate,OfficeAssignment")] Instructor instructor, 
+        public async Task<IActionResult> Create(
+            [Bind("ID,LastName,FirstName,HireDate,OfficeAssignment")] Instructor instructor,
             string[] selectedCourses)
         {
             if (selectedCourses != null)
@@ -98,13 +98,14 @@ namespace Nous_University.MVC.Controllers
                     instructor.CourseAssignments.Add(courseToAdd);
                 }
             }
-            
+
             if (!ModelState.IsValid)
             {
                 _context.Add(instructor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             PopulateAssignedCourseData(instructor);
             return View(instructor);
         }
@@ -137,7 +138,7 @@ namespace Nous_University.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>  Edit(int? id, string[] selectedCourses)
+        public async Task<IActionResult> Edit(int? id, string[] selectedCourses)
         {
             if (id == null)
             {
@@ -275,7 +276,6 @@ namespace Nous_University.MVC.Controllers
                     _context.Remove(courseToRemove);
                 }
             }
-
         }
     }
 }
