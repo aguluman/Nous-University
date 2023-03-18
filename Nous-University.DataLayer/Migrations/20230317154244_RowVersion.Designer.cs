@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nous_University.DataLayer.Data;
 
@@ -11,9 +12,10 @@ using Nous_University.DataLayer.Data;
 namespace Nous_University.DataLayer.Migrations
 {
     [DbContext(typeof(NousUniversityDbContext))]
-    partial class NousUniversityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230317154244_RowVersion")]
+    partial class RowVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
